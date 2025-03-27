@@ -1,4 +1,11 @@
 const board=document.getElementById("container");
+const mode=document.getElementById("mode");
+
+mode.value="2";
+
+mode.onchange=function(){
+  game=new Game();
+}
 
 class Game{
   cols=3;     //How many colomns
@@ -6,6 +13,7 @@ class Game{
   cnt;        //cols * rows
   blocks;     //playable spaces
   turnO;      //is it Player O turn
+  pTURN=true;
   canPlay=true;
 
   constructor(){
@@ -28,6 +36,44 @@ class Game{
         block.addEventListener('click', (e)=>this.onBlockClick(blockIdx));
       }
     }
+
+    switch(mode.value){
+      case "1": console.log("Human vs. Human"); break;
+      case "2": console.log("Human vs. Computer"); this.play(2); break;
+      case "3": console.log("Human vs. AI"); break;
+      case "4": console.log("Computer vs. Computer"); this.play(4);
+    }
+  }
+
+  async play(val){
+    while(this.canPlay){
+      if (val==2){
+        await this.delay(1000);
+        if(!this.pTURN&&this.canPlay){
+          this.computerMove();
+          this.pTURN=true;
+        }
+      }
+      if (val==4){
+        this.computerMove();
+        await this.delay(500);
+      }
+    }
+  }
+
+  delay(ms){
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  computerMove(){
+    let spaces=this.blocks.map(s=>s.innerText);
+    let empty=[];
+    for(let i=0; i<this.cnt; i++){
+      if(spaces[i]=="")
+        empty.push(i)
+    }
+    let x=Math.floor(Math.random()*empty.length);
+    this.setBlock(this.blocks[empty[x]]);
   }
 
   /* positions the block at a certain coordinates */
@@ -41,22 +87,26 @@ class Game{
   onBlockClick(blockIdx){
     let block=this.blocks[blockIdx];
     if(this.canPlay){
-      if (this.turnO){
-        block.innerText = 'O';
-        this.turnO=false;
-        block.disabled=true;
-        this.checkWinner();
-      } else {
-        block.innerText = 'X';
-        this.turnO=true;
-        block.disabled=true;
-        this.checkWinner();
-      }
+      this.setBlock(block);
+      this.pTURN=false;
+    }
+  }
+
+  setBlock(block){
+    if (this.turnO){
+      block.innerText = 'O';
+      this.turnO=false;
+      block.disabled=true;
+      this.checkWinner();
+    } else {
+      block.innerText = 'X';
+      this.turnO=true;
+      block.disabled=true;
+      this.checkWinner();
     }
   }
 
   checkWinner(){
-    //let win=false;
     for(let pattern of winningPatterns){
       let A = this.blocks[pattern[0]].innerText;
       let B = this.blocks[pattern[1]].innerText;
