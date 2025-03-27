@@ -5,103 +5,53 @@
 }
 
 :root{
-  --bgcol: lightcyan;
-  --mcol0: yellow;
+  --bgcol: #37474F;
+  --mcol0: #29B6F6;
   --mcol1: #2196F3;
   --mcol2: #1976D2;
   --txtcol0: #90A4AE;
-  --txtcol1: teal;
-  --whitecol: white;
-  --darkcol: lightgray;
+  --txtcol1: #607D8B;
+  --whitecol: #ECEFF1;
+  --darkcol: #263238;
 }
 
-body {
-  background-color: var(--bgcol);
-  text-align: center;
-}
-
-.container{
-  height: 75vh;
+body{
+  overflow: hidden;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 15vh;
+  background-color: var(--bgcol);
 }
 
-#board{
-  height: 60vmin;
-  width: 60vmin;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5vmin;
-  justify-content: center;
-}
-
-.box{
-  height: 18vmin;
-  width: 18vmin;
-  border-radius: 1rem;
-  border: none;
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
-  font-size: 8vmin;
-  color: red;
-  background-color: yellow;
-}
-
-#reset{
-  padding: 1rem;
-  font-size: 1.25rem;
-  background: #191913;
-  color: white;
-  border-radius: 1rem;
-  border: none;
-}
-
-.box:hover{
-  background-color: chocolate;
-}
-
-#new-btn{
-  padding: 1rem;
-  font-size: 1.25rem;
-  background: #191913;
-  color: white;
-  border-radius: 1rem;
-  border: none;
-}
-
-#msg{
-  font-size: 8vmin;
-}
-.msg-container{
-  height: 30vmin;
-}
-.hide{
-  display: none;
-}
-
-.game {
+#container{
   position: relative;
+  overflow: hidden;
   width: 75vh;
   height: 75vh;
   background-color: var(--darkcol);
-  border-radius: 8px;
-  border: 1px solid var(--mcol0);
-  box-shadow: 0px 8px 0px var(--mcol0);
+  border-radius: 0.75rem;
+  border: 0.1rem solid var(--mcol0);
+  box-shadow: 0rem 0.75rem 0rem var(--mcol0);
 }
 
-.space{
+.block{
   position: absolute;
   left: 0;
   top: 0;
-  width: 33.4%;
-  height: 33.4%;
+  width: 33.9%;
+  height: 33.9%;
+  border: 0.1rem solid var(--mcol0);
   background-color: var(--txtcol1);
   color: var(--whitecol);
-  font-size: 15vh;
+  font-size: 15vmin;
   font-weight: bold;
   text-align: center;
-  padding-top: 3%;
+  padding: 3%;
   cursor: pointer;
   user-select: none;
-  transition: left 0.3s,top 0.3s;
+}
+.block:hover{
+  background-color: var(--txtcol0);
 }
