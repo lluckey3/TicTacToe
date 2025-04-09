@@ -4,5 +4,14 @@ const winningPatterns = [
   [0, 4, 8], [2, 4, 6]              //Diagonal
 ];
 
+const board=document.getElementById("container");
+const mode=document.getElementById("mode");
+
+mode.value="3";
+
+mode.onchange=function(){
+  game=new TicTacToe();
+}
+
 /* Driver Code */
-var game=new Game();   // instantiate a new Game
+var game=new TicTacToe();   // instantiate a new Game

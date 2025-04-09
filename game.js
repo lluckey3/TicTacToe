@@ -1,25 +1,26 @@
 const board=document.getElementById("container");
 const mode=document.getElementById("mode");
+const scores={X:1, O:-1, tie: 0};
 
-mode.value="2";
+mode.value="3";
 
 mode.onchange=function(){
   game=new Game();
 }
 
 class Game{
-  cols=3;     //How many colomns
-  rows=3;     //How many rows
-  cnt;        //cols * rows
-  blocks;     //playable spaces
-  turnO;      //is it Player O turn
-  pTURN=true;
-  canPlay=true;
+  cols=3;       //How many colomns
+  rows=3;       //How many rows
+  cnt;          //cols * rows
+  blocks;       //playable spaces
+  xTurn=false;  //is it the X Player's turn
+  canPlay=true; //is the game going?
+  marker="O";
+  state;
 
   constructor(){
     this.cnt = this.cols * this.rows;
     this.blocks=[];
-    this.turnO=true;
     this.init();
   }
 
@@ -38,9 +39,9 @@ class Game{
     }
 
     switch(mode.value){
-      case "1": console.log("Human vs. Human"); break;
+      case "1": console.log("Human vs. Human"); this.play(1); break;
       case "2": console.log("Human vs. Computer"); this.play(2); break;
-      case "3": console.log("Human vs. AI"); break;
+      case "3": console.log("Human vs. AI"); this.play(3); break;
       case "4": console.log("Computer vs. Computer"); this.play(4);
     }
   }
@@ -49,15 +50,25 @@ class Game{
     while(this.canPlay){
       if (val==2){
         await this.delay(1000);
-        if(!this.pTURN&&this.canPlay){
-          this.computerMove();
-          this.pTURN=true;
+        if(!this.xTurn&&this.canPlay){
+          this.computerMove(val);
+        }
+      }
+      if (val==3){
+        await this.delay(1000);
+        if(!this.xTurn&&this.canPlay){
+          this.computerMove(val);
         }
       }
       if (val==4){
-        this.computerMove();
+        this.computerMove(val);
         await this.delay(500);
       }
+    }
+    if(this.state=="tie"){
+      console.log("Match is a Draw");
+    } else {
+      console.log("Winner is", this.state);
     }
   }
 
@@ -65,15 +76,47 @@ class Game{
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  computerMove(){
+  computerMove(val){
     let spaces=this.blocks.map(s=>s.innerText);
     let empty=[];
-    for(let i=0; i<this.cnt; i++){
+    for(let i=0; i<spaces.length; i++){
       if(spaces[i]=="")
         empty.push(i)
     }
-    let x=Math.floor(Math.random()*empty.length);
-    this.setBlock(this.blocks[empty[x]]);
+    let move=Math.floor(Math.random()*empty.length);
+
+    let bestScore = -Infinity;
+    if(val == 3){
+      for(let i=0; i<empty.length; i++){
+        let score = this.minmax(i,0,this.xTurn);
+        if(score > bestScore){
+          bestScore = score;
+          move = i;
+        }
+      }
+    }
+    //this.xTurn=true;
+    this.setBlock(this.blocks[empty[move]]);
+  }
+
+  //maximizing player is always X, minimizing player is always O
+  minmax(val, depth, isMax){
+    let cBlocks = this.blocks.map(s=>s.innerText);
+    cBlocks[val]=this.marker;
+    let result = this.checkWinner(cBlocks);
+    console.log(cBlocks,result);
+    //console.log(spaces, cBlocks, depth, isMax, result, scores[result]);
+
+    // Terminal condition
+    if(result != null){
+      return scores[result];
+    }
+
+    if(isMax){
+      let bestScore = -Infinity;
+    }
+    
+    return 1;
   }
 
   /* positions the block at a certain coordinates */
@@ -88,43 +131,43 @@ class Game{
     let block=this.blocks[blockIdx];
     if(this.canPlay){
       this.setBlock(block);
-      this.pTURN=false;
     }
   }
 
   setBlock(block){
-    if (this.turnO){
-      block.innerText = 'O';
-      this.turnO=false;
-      block.disabled=true;
-      this.checkWinner();
+    if(this.xTurn){this.marker="X";} else {this.marker="O";}
+    block.innerText = this.marker;
+    if (this.xTurn){
+      this.xTurn=false;
     } else {
-      block.innerText = 'X';
-      this.turnO=true;
-      block.disabled=true;
-      this.checkWinner();
+      this.xTurn=true;
+    }
+    block.disabled=true;
+    this.state = this.checkWinner(this.blocks.map(s=>s.innerText));
+    if(this.state!=null){
+      this.canPlay = false;
     }
   }
 
-  checkWinner(){
+  checkWinner(BLOCKS){
+    let winner = null;
     for(let pattern of winningPatterns){
-      let A = this.blocks[pattern[0]].innerText;
-      let B = this.blocks[pattern[1]].innerText;
-      let C = this.blocks[pattern[2]].innerText;
+      let A = BLOCKS[pattern[0]];
+      let B = BLOCKS[pattern[1]];
+      let C = BLOCKS[pattern[2]];
 
-      if (A !== "" && B!=="" && C!=="" &&
+      if (A != "" && B!="" && C!="" &&
           A === B && B === C) {
-            console.log("Winner is", A);
-          this.canPlay = false;
-          return;
+            winner = A;
       }
     }
 
-    if (this.canPlay) {
-      const spaces = [...this.blocks].every((block) => block.innerText !== "");
-      if (spaces) {
-          console.log("Match is a Draw");
+    if (this.canPlay && winner==null) {
+      let spaces = BLOCKS.includes("");
+      if (!spaces) {
+        winner = "tie";
       }
     }
+    return winner;
   }
 }
