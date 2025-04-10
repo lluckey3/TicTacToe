@@ -7,11 +7,9 @@ const winningPatterns = [
 const board=document.getElementById("container");
 const mode=document.getElementById("mode");
 
-mode.value="3";
-
-mode.onchange=function(){
-  game=new TicTacToe();
-}
-
 /* Driver Code */
 var game=new TicTacToe();   // instantiate a new Game
+
+function delay(ms){
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

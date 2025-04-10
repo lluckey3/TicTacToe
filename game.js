@@ -55,7 +55,7 @@ class Game{
         }
       }
       if (val==3){
-        await this.delay(1000);
+        //await this.delay(1000);
         if(!this.xTurn&&this.canPlay){
           this.computerMove(val);
         }
