@@ -1,5 +1,5 @@
 const board=document.getElementById("container");
-const mode=document.getElementById("mode");
+//const mode=document.getElementById("mode");
 const scores={X:1, O:-1, tie: 0};
 
 mode.value="3";

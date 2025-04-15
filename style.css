@@ -16,13 +16,24 @@
 }
 
 body{
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 15vh;
   background-color: var(--bgcol);
+}
+
+h1{
+  padding: 0;
+  margin: 0;
+  color: var(--whitecol);
+  font-size: 10vw;
+}
+
+#game{
+  margin: 30px;
+  font-size: 30px;
 }
 
 #container{
