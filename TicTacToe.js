@@ -88,15 +88,15 @@ class TicTacToe{
       console.log("AI");
       let bestScore=-Infinity;
       console.time("AI Move");
-      for(let i=0; i<empty.length; i++){
-        this.blocks[empty[i]].innerText = this.xTurn ? this.players[1]:this.players[0];
+      for(let space in empty){
+        this.blocks[empty[space]].innerText = this.xTurn ? this.players[1]:this.players[0];
         let score = this.minimax(this.blocks,0,!this.xTurn);  // checks the outcome of the next move;
-        this.blocks[empty[i]].innerText = "";
+        this.blocks[empty[space]].innerText = "";
         if(score > bestScore){
           bestScore = score;
-          move=i;
+          move=space;
         }
-        let results={space:empty[i], Score:score, BestMove:empty[move]}
+        let results={space:empty[space], Score:score, BestMove:empty[move]}
         console.log(results);
       }
       console.timeEnd("AI Move");
@@ -105,6 +105,9 @@ class TicTacToe{
       console.log("AI");
       let bestScore=-Infinity;
       console.time("AI Move");
+      for(let space in board){
+
+      }
       for(let i=0; i<empty.length; i++){
         this.blocks[empty[i]].innerText = this.xTurn ? this.players[1]:this.players[0];
         let score = this.minimax(this.blocks,0,-Infinity,Infinity,!this.xTurn);  // checks the outcome of the next move;
