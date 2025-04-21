@@ -49,17 +49,12 @@ h1{
 
 .block{
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 33.9%;
-  height: 33.9%;
+  padding: 3%;
   border: 0.1rem solid var(--mcol0);
   background-color: var(--txtcol1);
   color: var(--whitecol);
-  font-size: 15vmin;
   font-weight: bold;
   text-align: center;
-  padding: 3%;
   cursor: pointer;
   user-select: none;
 }

@@ -1,6 +1,8 @@
 const scores={X:1, O:-1, tie: 0};
 
 class TicTacToe{
+  rows=3; cols=3;
+  n = this.rows*this.cols;
   blocks;        //playable spaces
   xTurn=false;   //is it the X Player's turn
   canPlay=true;  //is the game going?
@@ -21,18 +23,16 @@ class TicTacToe{
   }
 
   init(){
-    for(let row=0;row<3;row++){
-      for(let col=0;col<3;col++){
-        let blockIdx = row+col*3;
-        
+    for(let row=0;row<this.rows;row++){
+      for(let col=0;col<this.cols;col++){
         let block = document.createElement("button");
         block.classList.add("block");
         block.addEventListener('click', (e)=>this.onBlockClick(block));
         board.appendChild(block);
-        this.positionBlock(block,row,col);
         this.blocks.push(block);
       }
     }
+    this.positionBlocks();
 
     switch(mode.value){
       case "1": console.log("Human vs. Human"); this.play(1); break;
@@ -65,9 +65,6 @@ class TicTacToe{
         }
       }
     }
-      //if(this.xTurn&&this.canPlay){
-      //  this.computerMove();
-      //}
     if(this.state=="tie"){
       console.log("Match is a Draw");
     } else {
@@ -213,9 +210,20 @@ class TicTacToe{
   }
 
   /* positions the block at a certain coordinates */
-  positionBlock(block,row,col){
-    block.style.top = (row*block.clientWidth) + "px";
-    block.style.left = (col*block.clientHeight) + "px";
+  positionBlocks(){
+    for(let row=0;row<this.rows;row++){
+      for(let col=0;col<this.cols;col++){
+        let index = row+col*this.rows;
+        let block = this.blocks[index];
+
+        block.style.fontSize = block.clientWidth/this.cols + "vmin";
+        block.style.height = board.clientHeight/this.rows + "px";
+        block.style.width = board.clientWidth/this.cols + "px";
+        console.log()
+        block.style.top = (row*block.clientHeight) + (board.clientHeight*((2*this.rows)*0.001)*row) +"px";
+        block.style.left = (col*block.clientWidth) + (board.clientWidth*((2*this.cols)*0.001)*col) +"px";
+      }
+    }
   }
   /* try move block and check if puzzle was solved */
   onBlockClick(block){

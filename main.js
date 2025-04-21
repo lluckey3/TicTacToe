@@ -8,10 +8,14 @@ const board=document.getElementById("container");
 const mode=document.getElementById("mode");
 const gameBtn=document.getElementById("game");
 
-mode.value="3";
+mode.value="1";
 
 mode.onchange=function(){
   game=new TicTacToe();
+}
+
+window.onresize=function(){
+  game.positionBlocks();
 }
 
 gameBtn.addEventListener('click', (e)=>{game=new TicTacToe()});
