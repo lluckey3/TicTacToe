@@ -1,14 +1,8 @@
-const winningPatterns = [
-  [0, 1, 2], [3, 4, 5], [6, 7, 8],  //Horizontal
-  [0, 3, 6], [1, 4, 7], [2, 5, 8],  //Vertical
-  [0, 4, 8], [2, 4, 6]              //Diagonal
-];
-
 const board=document.getElementById("container");
 const mode=document.getElementById("mode");
 const gameBtn=document.getElementById("game");
 
-mode.value="1";
+mode.value="3";
 
 mode.onchange=function(){
   game=new TicTacToe();
